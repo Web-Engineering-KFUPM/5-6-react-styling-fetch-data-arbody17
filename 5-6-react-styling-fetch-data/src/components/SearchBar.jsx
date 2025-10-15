@@ -3,7 +3,6 @@ import { Form, InputGroup } from 'react-bootstrap'
 
 function SearchBar({ searchTerm, onSearchChange }) {
   return (
-    // ✅ TODO 1.3: Added Bootstrap margin-bottom
     <div className="mb-4">
       <InputGroup>
         <InputGroup.Text>🔍</InputGroup.Text>

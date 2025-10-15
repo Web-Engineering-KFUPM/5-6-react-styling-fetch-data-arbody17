@@ -307,34 +307,27 @@ function App() {
     {/*API fetch logic*/}
   }, [])
 
-  const handleUserClick = (user) => {
-  }
-
-  const handleCloseModal = () => {
-  }
+  const handleUserClick = (user) => {}
+  const handleCloseModal = () => {}
 
   return (
     <div className="app">
-      {/* TODO 1.1: Spacing on header */}
-      <header className="py-3 mb-4">
+      {/* TODO 1.2: Style the Header Section */}
+      <header className="bg-primary text-white py-3 mb-4 shadow">
         <Container>
-          <h1 className="">User Management Dashboard</h1>
-          <p className="">Manage and view user information</p>
+          <h1 className="h2 mb-0">User Management Dashboard</h1>
+          <p className="mb-0 opacity-75">Manage and view user information</p>
         </Container>
       </header>
 
-      {/* TODO 1.1: Spacing on main container */}
       <Container className="mb-4">
         <SearchBar />
-
         {/* {loading && <Spinner ... />} */}
         {/* {error && <Alert ...>{error}</Alert>} */}
         {/* <UserList users={filteredUsers} onUserClick={handleUserClick} /> */}
-
         <UserModal />
       </Container>
 
-      {/* TODO 1.1: Spacing on footer */}
       <footer className="py-4 mt-5">
         <Container>
           <p className="text-center text-muted mb-0">
@@ -347,4 +340,3 @@ function App() {
 }
 
 export default App
-

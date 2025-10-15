@@ -7,28 +7,6 @@ React Lab — USER MANAGEMENT DASHBOARD
 LAB SETUP INSTRUCTIONS
 ===================================================================
 
-1. Navigate to the project directory:
-   Open your terminal and run:
-      cd 5-6-react-styling-fetch-data
-
-2. Install project dependencies:
-   Run either of these commands:
-      npm i
-      OR
-      npm install
-
-3. Install React-Bootstrap and Bootstrap:
-   Run the following command:
-      npm install react-bootstrap bootstrap
-
-4. Start the development server:
-   Run:
-      npm run dev
-
-   If your system blocks running npm commands (especially on Windows PowerShell),
-   run this command first to allow script execution:
-      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
 5. Link Bootstrap CSS to your React project:
    Open the file: public/index.html
    Inside the <head> tag, add this line:
@@ -36,7 +14,7 @@ LAB SETUP INSTRUCTIONS
          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
          rel="stylesheet"
       >
-
+e
 ===================================================================
 TASK #1 — APPLY BOOTSTRAP COMPONENTS
 ===================================================================
@@ -327,7 +305,6 @@ function App() {
 
   useEffect(() => {
     {/*API fetch logic*/}
-
   }, [])
 
   const handleUserClick = (user) => {
@@ -338,14 +315,16 @@ function App() {
 
   return (
     <div className="app">
-      <header className="">
+      {/* TODO 1.1: Spacing on header */}
+      <header className="py-3 mb-4">
         <Container>
           <h1 className="">User Management Dashboard</h1>
           <p className="">Manage and view user information</p>
         </Container>
       </header>
 
-      <Container className="">
+      {/* TODO 1.1: Spacing on main container */}
+      <Container className="mb-4">
         <SearchBar />
 
         {/* {loading && <Spinner ... />} */}
@@ -355,7 +334,8 @@ function App() {
         <UserModal />
       </Container>
 
-      <footer className="">
+      {/* TODO 1.1: Spacing on footer */}
+      <footer className="py-4 mt-5">
         <Container>
           <p className="text-center text-muted mb-0">
             &copy; 2024 User Management Dashboard
@@ -367,3 +347,4 @@ function App() {
 }
 
 export default App
+

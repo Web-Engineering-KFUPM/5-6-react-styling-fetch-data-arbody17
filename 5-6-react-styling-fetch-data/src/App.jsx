@@ -7,28 +7,6 @@ React Lab — USER MANAGEMENT DASHBOARD
 LAB SETUP INSTRUCTIONS
 ===================================================================
 
-1. Navigate to the project directory:
-   Open your terminal and run:
-      cd 5-6-react-styling-fetch-data
-
-2. Install project dependencies:
-   Run either of these commands:
-      npm i
-      OR
-      npm install
-
-3. Install React-Bootstrap and Bootstrap:
-   Run the following command:
-      npm install react-bootstrap bootstrap
-
-4. Start the development server:
-   Run:
-      npm run dev
-
-   If your system blocks running npm commands (especially on Windows PowerShell),
-   run this command first to allow script execution:
-      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
 5. Link Bootstrap CSS to your React project:
    Open the file: public/index.html
    Inside the <head> tag, add this line:
@@ -36,7 +14,7 @@ LAB SETUP INSTRUCTIONS
          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
          rel="stylesheet"
       >
-
+e
 ===================================================================
 TASK #1 — APPLY BOOTSTRAP COMPONENTS
 ===================================================================
@@ -321,41 +299,89 @@ import { Container, Alert, Spinner } from 'react-bootstrap'
 import UserList from './components/UserList'
 import SearchBar from './components/SearchBar'
 import UserModal from './components/UserModal'
+import './Index.css'
 
 function App() {
+  // TODO 3.2: State variables
   const [users, setUsers] = useState([])
+  const [filteredUsers, setFilteredUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
 
+  // TODO 3.3: Fetch user data once
   useEffect(() => {
-    {/*API fetch logic*/}
-
+    const fetchUsers = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/users')
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        setUsers(data)
+        setFilteredUsers(data)
+      } catch (err) {
+        setError(err.message || 'Failed to fetch users')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchUsers()
   }, [])
 
-  const handleUserClick = (user) => {
-  }
+  // TODO 3.4: Filter users by searchTerm
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredUsers(users)
+      return
+    }
+    const filtered = users.filter(u =>
+      u.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setFilteredUsers(filtered)
+  }, [searchTerm, users])
 
+  // TODO 3.5: Modal handlers
+  const handleUserClick = (user) => {
+    setSelectedUser(user)
+    setShowModal(true)
+  }
   const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedUser(null)
   }
 
   return (
     <div className="app">
-      <header className="">
+      {/* Header */}
+      <header className="bg-primary text-white py-3 mb-4 shadow">
         <Container>
-          <h1 className="">User Management Dashboard</h1>
-          <p className="">Manage and view user information</p>
+          <h1 className="h2 mb-0">User Management Dashboard</h1>
+          <p className="mb-0 opacity-75">Manage and view user information</p>
         </Container>
       </header>
 
-      <Container className="">
-        <SearchBar />
+      {/* Main */}
+      <Container className="mb-4">
+        {/* Search */}
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
-        {/* {loading && <Spinner ... />} */}
-        {/* {error && <Alert ...>{error}</Alert>} */}
-        {/* <UserList users={filteredUsers} onUserClick={handleUserClick} /> */}
+        {/* TODO 3.6: Loading & Error */}
+        {loading && <Spinner animation="border" role="status" />}
+        {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
 
-        <UserModal />
+        {/* TODO 3.7: Display Data */}
+        {!loading && !error && (
+          <UserList users={filteredUsers} onUserClick={handleUserClick} />
+        )}
+
+        {/* Modal */}
+        <UserModal show={showModal} user={selectedUser} onHide={handleCloseModal} />
       </Container>
 
-      <footer className="">
+      {/* Footer */}
+      <footer className="bg-light py-4 mt-5">
         <Container>
           <p className="text-center text-muted mb-0">
             &copy; 2024 User Management Dashboard

@@ -328,13 +328,14 @@ function App() {
         <UserModal />
       </Container>
 
-      <footer className="py-4 mt-5">
-        <Container>
-          <p className="text-center text-muted mb-0">
+      <footer className="bg-light py-4 mt-5">
+      <Container>
+         <p className="text-center text-muted mb-0">
             &copy; 2024 User Management Dashboard
-          </p>
-        </Container>
+         </p>
+      </Container>
       </footer>
+
     </div>
   )
 }

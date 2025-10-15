@@ -311,9 +311,26 @@ function App() {
   const [selectedUser, setSelectedUser] = useState(null)
 
 
-  useEffect(() => {
-    {/*API fetch logic*/}
-  }, [])
+  // TODO 3.3: Fetch user data once
+useEffect(() => {
+  const fetchUsers = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('https://jsonplaceholder.typicode.com/users')
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      setUsers(data)
+      setFilteredUsers(data)
+    } catch (err) {
+      setError(err.message || 'Failed to fetch users')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  fetchUsers()
+}, [])
+
 
   const handleUserClick = (user) => {}
   const handleCloseModal = () => {}

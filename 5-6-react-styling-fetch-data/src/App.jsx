@@ -299,6 +299,7 @@ import { Container, Alert, Spinner } from 'react-bootstrap'
 import UserList from './components/UserList'
 import SearchBar from './components/SearchBar'
 import UserModal from './components/UserModal'
+import './Index.css'
 
 function App() {
   // TODO 3.2: State variables
@@ -310,34 +311,50 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
-
   // TODO 3.3: Fetch user data once
-useEffect(() => {
-  const fetchUsers = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('https://jsonplaceholder.typicode.com/users')
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-      setUsers(data)
-      setFilteredUsers(data)
-    } catch (err) {
-      setError(err.message || 'Failed to fetch users')
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/users')
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        setUsers(data)
+        setFilteredUsers(data)
+      } catch (err) {
+        setError(err.message || 'Failed to fetch users')
+      } finally {
+        setLoading(false)
+      }
     }
+    fetchUsers()
+  }, [])
+
+  // TODO 3.4: Filter users by searchTerm
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredUsers(users)
+      return
+    }
+    const filtered = users.filter(u =>
+      u.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setFilteredUsers(filtered)
+  }, [searchTerm, users])
+
+  // TODO 3.5: Modal handlers
+  const handleUserClick = (user) => {
+    setSelectedUser(user)
+    setShowModal(true)
   }
-
-  fetchUsers()
-}, [])
-
-
-  const handleUserClick = (user) => {}
-  const handleCloseModal = () => {}
+  const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedUser(null)
+  }
 
   return (
     <div className="app">
-      {/* TODO 1.2: Style the Header Section */}
+      {/* Header */}
       <header className="bg-primary text-white py-3 mb-4 shadow">
         <Container>
           <h1 className="h2 mb-0">User Management Dashboard</h1>
@@ -345,22 +362,32 @@ useEffect(() => {
         </Container>
       </header>
 
+      {/* Main */}
       <Container className="mb-4">
-        <SearchBar />
-        {/* {loading && <Spinner ... />} */}
-        {/* {error && <Alert ...>{error}</Alert>} */}
-        {/* <UserList users={filteredUsers} onUserClick={handleUserClick} /> */}
-        <UserModal />
+        {/* Search */}
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
+        {/* TODO 3.6: Loading & Error */}
+        {loading && <Spinner animation="border" role="status" />}
+        {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+
+        {/* TODO 3.7: Display Data */}
+        {!loading && !error && (
+          <UserList users={filteredUsers} onUserClick={handleUserClick} />
+        )}
+
+        {/* Modal */}
+        <UserModal show={showModal} user={selectedUser} onHide={handleCloseModal} />
       </Container>
 
+      {/* Footer */}
       <footer className="bg-light py-4 mt-5">
-      <Container>
-         <p className="text-center text-muted mb-0">
+        <Container>
+          <p className="text-center text-muted mb-0">
             &copy; 2024 User Management Dashboard
-         </p>
-      </Container>
+          </p>
+        </Container>
       </footer>
-
     </div>
   )
 }
